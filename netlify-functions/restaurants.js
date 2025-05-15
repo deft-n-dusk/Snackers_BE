@@ -15,15 +15,16 @@ exports.handler = async function (event) {
   }
 
   try {
-    const response = await axios.get('https://www.swiggy.com/dapi/restaurants/list/v5', {
-      params: {
-        lat: '28.6691565',
-        lng: '77.45375779999999',
-        is_seo_homepage_enabled: true,
-        page_type: 'DESKTOP_WEB_LISTING',
-      },
+    // Hardcoded coordinates
+    const lat = '28.7040592';
+    const lng = '77.10249019999999';
+
+    const url = `https://www.swiggy.com/dapi/restaurants/list/v5?lat=${lat}&lng=${lng}&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING`;
+
+    const response = await axios.get(url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0',
+        'user-agent': 'Mozilla/5.0',
+        'accept': 'application/json',
       },
     });
 
@@ -33,6 +34,7 @@ exports.handler = async function (event) {
       headers,
     };
   } catch (err) {
+    console.error("Backend error:", err);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: err.message }),
